@@ -91,7 +91,47 @@ const convertToDiscussion = (obj) => {
   return li;
 };
 
-    
+
+// 제출 이벤트 만들기
+let form = document.querySelector("form");
+let submit_arr = []
+if (window.localStorage.getItem("key") !== null) { // 로컬 스토리지가 비어있을 때를 대비한 조건문
+  submit_arr = [...JSON.parse(window.localStorage.getItem("key"))];
+}
+
+form.addEventListener("submit", () => {
+  const name_value = document.querySelector('.form__input--name>input').value;
+  const title_value = document.querySelector('.form__input--title>input').value;
+  const question_value = document.querySelector('.form__textbox>textarea').value;
+  const li = {
+      id: "",
+      createdAt: new Date(),
+      title: title_value,
+      url: "",
+      author: name_value,
+      bodyHTML: question_value,
+      avatarUrl:"https://w7.pngwing.com/pngs/565/454/png-transparent-user-computer-icons-anonymity-head-miscellaneous-face-service.png",
+    };
+
+  // 제출했을 때 값 초기화
+  if (name_value.trim() !== "" && title_value.trim() !== "" && question_value.trim() !== ""){
+    submit_arr.unshift(li);
+    document.querySelector('.form__input--name>input').value = "";
+    document.querySelector('.form__input--title>input').value = "";
+    document.querySelector('.form__textbox>textarea').value = "";
+  }
+  else {
+    alert("빈칸을 모두 입력해주세요.")
+  }
+
+  // 로컬 스토리지 저장
+  window.localStorage.setItem("key", JSON.stringify(submit_arr));
+  JSON.parse(window.localStorage.getItem("key"));
+  window.location.reload();
+})
+agoraStatesDiscussions = [...submit_arr, ...agoraStatesDiscussions];
+
+
 
 // agoraStatesDiscussions 배열의 모든 데이터를 화면에 렌더링하는 함수입니다.
 const render = (element) => {
@@ -107,37 +147,37 @@ render(ul);
 
 
 
-// 제출 이벤트 만들기
-let form = document.querySelector("form");
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const name_value = document.querySelector('.form__input--name>input').value;
-  const title_value = document.querySelector('.form__input--title>input').value;
-  const question_value = document.querySelector('.form__textbox>textarea').value;
-  const ul = document.querySelector('.discussions__container');
-  const li = convertToDiscussion({
-      id: "",
-      createdAt: new Date(),
-      title: title_value,
-      url: "",
-      author: name_value,
-      bodyHTML: question_value,
-      avatarUrl:"https://w7.pngwing.com/pngs/565/454/png-transparent-user-computer-icons-anonymity-head-miscellaneous-face-service.png",
-    });
+// // 제출 이벤트 만들기
+// let form = document.querySelector("form");
+// form.addEventListener("submit", (event) => {
+//   event.preventDefault();
+//   const name_value = document.querySelector('.form__input--name>input').value;
+//   const title_value = document.querySelector('.form__input--title>input').value;
+//   const question_value = document.querySelector('.form__textbox>textarea').value;
+//   const ul = document.querySelector('.discussions__container');
+//   const li = convertToDiscussion({
+//       id: "",
+//       createdAt: new Date(),
+//       title: title_value,
+//       url: "",
+//       author: name_value,
+//       bodyHTML: question_value,
+//       avatarUrl:"https://w7.pngwing.com/pngs/565/454/png-transparent-user-computer-icons-anonymity-head-miscellaneous-face-service.png",
+//     });
 
 
-  // 제출했을 때 값 초기화
-  if (name_value.trim() !== "" && title_value.trim() !== "" && question_value.trim() !== ""){
-    ul.prepend(li);
-    document.querySelector('.form__input--name>input').value = "";
-    document.querySelector('.form__input--title>input').value = "";
-    document.querySelector('.form__textbox>textarea').value = "";
-  }
-  else {
-    alert("빈칸을 모두 입력해주세요.")
-  }
+//   // 제출했을 때 값 초기화
+//   if (name_value.trim() !== "" && title_value.trim() !== "" && question_value.trim() !== ""){
+//     ul.prepend(li);
+//     document.querySelector('.form__input--name>input').value = "";
+//     document.querySelector('.form__input--title>input').value = "";
+//     document.querySelector('.form__textbox>textarea').value = "";
+//   }
+//   else {
+//     alert("빈칸을 모두 입력해주세요.")
+//   }
 
-})
+// })
 
 
 
